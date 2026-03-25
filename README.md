@@ -68,14 +68,6 @@ npm run dev # Starts the Dev server on http://localhost:5173
 
 ---
 
-## 🌐 Deployment
-This project is configured for seamless deployment on **Vercel**. 
-
-1.  **Push to GitHub**: Initialize your repo and push the code.
-2.  **Connect to Vercel**: Import the repository on [Vercel](https://vercel.com).
-3.  **Configure Environment Variables**: Add your `MONGO_URI` and `JWT_SECRET` in the settings tab.
-
----
 
 ### **Student Syllabus Compliance**
 *This project strictly avoids TypeScript and other external compilers. It uses standard HTML5, CSS3, JavaScript (ES6+), React JS, and Node.js to align with standard web development academic requirements.*
