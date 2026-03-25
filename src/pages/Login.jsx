@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import { DataService } from '../utils/DataService';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Mail, Lock, Loader2, ArrowRight } from 'lucide-react';
-
-import { API_URL } from '../utils/config';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -18,24 +17,12 @@ const Login = () => {
     setError('');
     
     try {
-      const res = await fetch(`${API_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      
-      const contentType = res.headers.get("content-type");
-      if (contentType && contentType.indexOf("application/json") !== -1) {
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.msg || 'Login failed');
-        login(data.user, data.token);
-        navigate('/');
-      } else {
-        const text = await res.text();
-        throw new Error(text || 'Server error. Make sure MongoDB is running.');
-      }
+      const data = await DataService.login(formData.email, formData.password);
+      if (!data.ok) throw new Error(data.msg || 'Login failed');
+      login(data.user, data.token);
+      navigate('/');
     } catch (err) {
-      setError(err.message === 'Failed to fetch' ? 'Cannot connect to backend server. Is it running?' : err.message);
+      setError(err.message);
     } finally {
       setLoading(false);
     }

@@ -75,41 +75,45 @@ const Hackathons = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const payload = {
       ...formData,
       skills: formData.skills.split(',').map(s => s.trim()).filter(Boolean)
     };
 
-    const url = editingId ? `${API_URL}/api/student/hackathon/${editingId}` : `${API_URL}/api/student/hackathon`;
-    const method = editingId ? 'PUT' : 'POST';
-
-    const res = await fetch(url, {
-      method,
-      headers: { 'Content-Type': 'application/json', 'x-auth-token': token },
-      body: JSON.stringify(payload)
-    });
-    const savedHackathon = await res.json();
-
-    if (editingId) {
-      setLocalHackathons(prev => prev.map(h => h._id === editingId ? savedHackathon : h));
-      if (setHackathons) setHackathons(prev => prev.map(h => h._id === editingId ? savedHackathon : h));
-    } else {
-      setLocalHackathons(prev => [...prev, savedHackathon]);
-      if (setHackathons) setHackathons(prev => [...prev, savedHackathon]);
+    try {
+      if (editingId) {
+        await DataService.updateHackathon(editingId, payload, token);
+      } else {
+        await DataService.addHackathon(payload, token);
+      }
+      
+      const freshData = await DataService.getDashboardData(token);
+      setLocalHackathons(freshData.hackathons || []);
+      if (setHackathons) setHackathons(freshData.hackathons || []); // Update context as well
+      setIsModalOpen(false);
+      resetForm();
+    } catch (error) {
+      console.error("Error submitting hackathon:", error);
+      // Optionally, show an error message to the user
+    } finally {
+      setLoading(false);
     }
-    
-    setIsModalOpen(false);
-    resetForm();
   };
 
   const handleDelete = async (id) => {
     if (confirm('Are you sure you want to delete this hackathon?')) {
-      await fetch(`${API_URL}/api/student/hackathon/${id}`, {
-        method: 'DELETE',
-        headers: { 'x-auth-token': token }
-      });
-      setLocalHackathons(prev => prev.filter(h => h._id !== id));
-      if (setHackathons) setHackathons(prev => prev.filter(h => h._id !== id));
+      setLoading(true);
+      try {
+        await DataService.deleteHackathon(id, token);
+        setLocalHackathons(prev => prev.filter(h => h._id !== id));
+        if (setHackathons) setHackathons(prev => prev.filter(h => h._id !== id)); // Update context as well
+      } catch (error) {
+        console.error("Error deleting hackathon:", error);
+        // Optionally, show an error message to the user
+      } finally {
+        setLoading(false);
+      }
     }
   };
 

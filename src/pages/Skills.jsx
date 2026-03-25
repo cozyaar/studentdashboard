@@ -30,7 +30,7 @@ const calculateLevel = (count) => {
   return 100;
 };
 
-import { API_URL } from '../utils/config';
+import { DataService } from '../utils/DataService';
 
 const Skills = () => {
   const { token } = useAuth();
@@ -42,34 +42,22 @@ const Skills = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch Hackathons
-        const res = await fetch(`${API_URL}/api/student/dashboard`, {
-          headers: { 'x-auth-token': token }
-        });
-        if (res.ok) {
-          const data = await res.json();
-          // Map skills from hackathons
-          const hSkills = (data.hackathons || []).flatMap(h => h.skills || []);
-          
-          // Map manually added skills from Settings
-          // A skill added with level 5 gets injected 5 times so its frequency boosts its calculated level
-          const mSkills = (data.skills || []).flatMap(s => Array(Math.max(1, s.level || 1)).fill(s.skillName));
-          
-          setHackathonSkills([...hSkills, ...mSkills]
-            .filter(s => typeof s === 'string')
-            .map(s => s.trim().toLowerCase())
-          );
-        }
+        const data = await DataService.getDashboardData();
+        
+        // Map skills from hackathons
+        const hSkills = (data.hackathons || []).flatMap(h => h.skills || []);
+        
+        // Map manually added skills from Settings
+        const mSkills = (data.skills || []).flatMap(s => Array(Math.max(1, s.level || 1)).fill(s.skillName));
+        
+        setHackathonSkills([...hSkills, ...mSkills]
+          .filter(s => typeof s === 'string')
+          .map(s => s.trim().toLowerCase())
+        );
 
-        // Fetch Projects from LocalStorage
-        const savedProjects = localStorage.getItem('student_projects');
-        if (savedProjects) {
-          try {
-             const parsed = JSON.parse(savedProjects);
-             const pSkills = (parsed || []).flatMap(p => p.techStack || []);
-             setProjectSkills(pSkills.filter(s => typeof s === 'string').map(s => s.trim().toLowerCase()));
-          } catch(e) {}
-        }
+        // Map skills from projects
+        const pSkills = (data.projects || []).flatMap(p => p.techStack || []);
+        setProjectSkills(pSkills.filter(s => typeof s === 'string').map(s => s.trim().toLowerCase()));
 
       } catch (err) {
         console.error("Failed to load skills data", err);

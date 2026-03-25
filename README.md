@@ -1,75 +1,16 @@
-# 🚀 Student Performance & Academic Dashboard
+# React + Vite
 
-A premium, full-stack **MERN** (MongoDB, Express, React, Node) application designed for high-performance students. This dashboard provides deep academic analytics, project tracking, attendance monitoring, and career path optimization with a stunning, neon-dark glassmorphic aesthetic.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
----
+Currently, two official plugins are available:
 
-## ✨ Key Features
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-- **🏆 Dynamic Dashboard**: Real-time visualization of academic performance, attendance, and upcoming milestones.
-- **📈 Attendance Tracker**: Detailed daily scheduling with a powerful "Remaining Classes" calculator for goal attainment.
-- **📂 Project Portfolio**: Comprehensive management of mini and major projects with milestone tracking and progress bars.
-- **🚀 Skill Gap Analysis**: Aggregated views of current technical skills compared to industry benchmarks for target roles (Web Dev, Data Science, AI/ML, etc.).
-- **🔮 Career Trajectory**: AI-driven career path recommendations based on academic history, project contributions, and extracurricular achievements.
-- **⚙️ Account Control Center**: Personalized profile management with photo upload, security controls, and session management.
+## React Compiler
 
----
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## 🎨 Design Aesthetic
-- **Neon Dark Mode**: High-contrast, vibrant visual language designed for readability and focus.
-- **Glassmorphism**: Elegant semi-transparent components with backdrop-blur effects for a premium feel.
-- **Dynamic Animations**: Smooth transitions and interactive elements for a cohesive, alive user experience.
-- **Typography-Focused**: Heavy use of bold, uppercase, and wide-spaced fonts to ensure clarity on all screens.
+## Expanding the ESLint configuration
 
----
-
-## 🛠️ Technology Stack
-- **Frontend**: React JS, Vite, Pure CSS, Lucide React, Recharts.
-- **Backend**: Node.js, Express JS, JWT (Authentication), MongoDB (Mongoose).
-- **Deployment**: Fully **Vercel-ready** with separate backend/frontend configurations.
-
----
-
-## ⚡ Quick Start
-
-### 1. Prerequisites
-- Node.js (v18 or higher)
-- MongoDB (Local instance or Cloud cluster via URI)
-
-### 2. Backend Setup
-```bash
-cd backend
-npm install
-npm start # Starts the API on http://localhost:5001
-```
-*Note: Create a `.env` file in the backend root with `MONGO_URI` and `JWT_SECRET`.*
-
-### 3. Frontend Setup
-```bash
-cd frontend
-npm install
-npm run dev # Starts the Dev server on http://localhost:5173
-```
-
----
-
-## 📂 Project Structure
-```text
-├── frontend/          # React application (Vite-powered)
-│   ├── src/pages/     # All main views (Dashboard, Skills, etc.)
-│   ├── src/components/# Reusable UI elements
-│   └── vercel.json    # Frontend Vercel configuration
-├── backend/           # Node.js/Express Server
-│   ├── models/        # MongoDB schemas (User, Attendance, etc.)
-│   ├── routes/        # API endpoints
-│   └── vercel.json    # Backend Vercel configuration
-└── walkthrough.md     # Detailed architecture explanation
-```
-
----
-
-
-### **Student Syllabus Compliance**
-*This project strictly avoids TypeScript and other external compilers. It uses standard HTML5, CSS3, JavaScript (ES6+), React JS, and Node.js to align with standard web development academic requirements.*
-
-Built for Excellence
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.

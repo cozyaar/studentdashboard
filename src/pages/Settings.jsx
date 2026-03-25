@@ -17,7 +17,7 @@ import {
   Camera
 } from 'lucide-react';
 
-import { API_URL } from '../utils/config';
+import { DataService } from '../utils/DataService';
 
 const Settings = () => {
   const { token, logout, user } = useAuth();
@@ -55,18 +55,9 @@ const Settings = () => {
   const handleAdd = async (endpoint, body, resetForm) => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}/api/student/${endpoint}`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'x-auth-token': token
-        },
-        body: JSON.stringify(body),
-      });
-      if (res.ok) {
-        notify(`${endpoint.charAt(0).toUpperCase() + endpoint.slice(1)} added successfully!`);
-        resetForm();
-      }
+      await DataService.addGeneric(endpoint, body);
+      notify(`${endpoint.charAt(0).toUpperCase() + endpoint.slice(1)} added successfully!`);
+      resetForm();
     } catch (err) {
       console.error(err);
     } finally {

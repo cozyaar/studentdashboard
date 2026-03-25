@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Mail, Lock, User, Hash, BookOpen, Calendar, Loader2 } from 'lucide-react';
+import { DataService } from '../utils/DataService';
 
 import { API_URL } from '../utils/config';
 

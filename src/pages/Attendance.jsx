@@ -17,7 +17,7 @@ import {
   History
 } from 'lucide-react';
 
-import { API_URL } from '../utils/config';
+import { DataService } from '../utils/DataService';
 
 const Attendance = () => {
   const { token, user } = useAuth();
@@ -78,10 +78,7 @@ const Attendance = () => {
 
   const fetchAttendance = async () => {
     try {
-      const res = await fetch(`${API_URL}/api/student/dashboard`, {
-        headers: { 'x-auth-token': token }
-      });
-      const data = await res.json();
+      const data = await DataService.getDashboardData();
       
       const processed = (data.attendance || []).map(a => {
           const stats = getCalculatedStats(a);
@@ -89,9 +86,9 @@ const Attendance = () => {
       });
       
       setAttendance(processed);
-      setLoading(false);
     } catch (err) {
       console.error(err);
+    } finally {
       setLoading(false);
     }
   };
@@ -119,15 +116,7 @@ const Attendance = () => {
     }
 
     try {
-      const res = await fetch(`${API_URL}/api/student/attendance`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-auth-token': token
-        },
-        body: JSON.stringify(newClass)
-      });
-      const savedClass = await res.json();
+      const savedClass = await DataService.addAttendance(newClass);
       setAttendance([...attendance, savedClass]);
       setShowAddModal(false);
     } catch (err) {
@@ -167,15 +156,7 @@ const Attendance = () => {
 
   const updateAttendanceItem = async (updatedItem) => {
     try {
-      const res = await fetch(`${API_URL}/api/student/attendance/${updatedItem._id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-auth-token': token
-        },
-        body: JSON.stringify(updatedItem)
-      });
-      const data = await res.json();
+      const data = await DataService.updateAttendance(updatedItem._id, updatedItem);
       setAttendance(attendance.map(a => a._id === data._id ? data : a));
       if (selectedClass?._id === data._id) setSelectedClass(data);
     } catch (err) {
@@ -185,10 +166,7 @@ const Attendance = () => {
 
   const deleteCourse = async (id) => {
     try {
-      await fetch(`${API_URL}/api/student/attendance/${id}`, {
-        method: 'DELETE',
-        headers: { 'x-auth-token': token }
-      });
+      await DataService.deleteAttendance(id);
       setAttendance(attendance.filter(a => a._id !== id));
       setSelectedClass(null);
       setConfirmDelete(null);
