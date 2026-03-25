@@ -4,7 +4,6 @@ import { useAuth } from '../context/AuthContext';
 import { Mail, Lock, User, Hash, BookOpen, Calendar, Loader2 } from 'lucide-react';
 import { DataService } from '../utils/DataService';
 
-import { API_URL } from '../utils/config';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -26,24 +25,13 @@ const Register = () => {
     setError('');
     
     try {
-      const res = await fetch(`${API_URL}/api/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+      const data = await DataService.register(formData);
+      if (!data.ok) throw new Error(data.msg || 'Registration failed');
       
-      const contentType = res.headers.get("content-type");
-      if (contentType && contentType.indexOf("application/json") !== -1) {
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.msg || 'Registration failed');
-        login(data.user, data.token);
-        navigate('/');
-      } else {
-        const text = await res.text();
-        throw new Error(text || 'Server error. Make sure MongoDB is running.');
-      }
+      login(data.user, data.token);
+      navigate('/');
     } catch (err) {
-      setError(err.message === 'Failed to fetch' ? 'Cannot connect to backend server. Is it running?' : err.message);
+      setError(err.message);
     } finally {
       setLoading(false);
     }

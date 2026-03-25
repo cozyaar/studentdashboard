@@ -3,28 +3,34 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('student_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) { return null; }
+  });
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (token) {
-      // Decode user from token or fetch from API
-      // For now, just keep the token
-      setLoading(false);
-    } else {
-      setLoading(false);
+    if (token && !user) {
+      // If we have a token but no user object, try to sync it
+      const savedUser = localStorage.getItem('student_user');
+      if (savedUser) setUser(JSON.parse(savedUser));
     }
-  }, [token]);
+    setLoading(false);
+  }, [token, user]);
 
   const login = (userData, userToken) => {
     localStorage.setItem('token', userToken);
+    localStorage.setItem('student_user', JSON.stringify(userData));
     setToken(userToken);
     setUser(userData);
   };
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('student_user');
     setToken(null);
     setUser(null);
   };

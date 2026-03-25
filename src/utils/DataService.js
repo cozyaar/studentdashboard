@@ -26,23 +26,7 @@ const setJSON = (key, val) => {
   localStorage.setItem(key, JSON.stringify(val));
 };
 
-export const DataService = {
-  // --- AUTH ---
-  login: async (email, password) => {
-    // Mock login logic - always succeeds for demo
-    const user = { name: 'Demo Student', email, role: 'Student', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=student' };
-    localStorage.setItem(STORAGE_KEYS.TOKEN, 'mock-jwt-token');
-    setJSON(STORAGE_KEYS.USER, user);
-    
-    // Seed demo data if it's the specific demo account or if storage is empty
-    if (email === 'student@vitstudent.ac.in') {
-      DataService.seedDemoData();
-    }
-    
-    return { ok: true, user, token: 'mock-jwt-token' };
-  },
-
-  seedDemoData: () => {
+const seedDemoData = () => {
     const demoAttendance = [
       { 
         _id: 'a1', subject: 'Data Structures & Algorithms', room: 'TT401', slot: 'A1+TA1', 
@@ -114,7 +98,25 @@ export const DataService = {
     localStorage.setItem('semesterStartDate', '2026-01-15');
     
     window.dispatchEvent(new Event('storage'));
+};
+
+export const DataService = {
+  // --- AUTH ---
+  login: async (email, password) => {
+    // Mock login logic - always succeeds for demo
+    const user = { name: 'Demo Student', email, role: 'Student', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=student' };
+    localStorage.setItem(STORAGE_KEYS.TOKEN, 'mock-jwt-token');
+    setJSON(STORAGE_KEYS.USER, user);
+    
+    // Seed demo data if it's the specific demo account or if storage is empty
+    if (email === 'student@vitstudent.ac.in') {
+      seedDemoData();
+    }
+    
+    return { ok: true, user, token: 'mock-jwt-token' };
   },
+
+  seedDemoData: seedDemoData,
 
   register: async (userData) => {
     localStorage.setItem(STORAGE_KEYS.TOKEN, 'mock-jwt-token');
@@ -124,6 +126,14 @@ export const DataService = {
 
   // --- DASHBOARD AGGREGATE ---
   getDashboardData: async () => {
+    // Auto-seed if demo account and storage is empty
+    const user = getJSON(STORAGE_KEYS.USER, null);
+    const hackathons = getJSON(STORAGE_KEYS.HACKATHONS);
+    
+    if (user?.email === 'student@vitstudent.ac.in' && hackathons.length === 0) {
+      DataService.seedDemoData();
+    }
+
     return {
       hackathons: getJSON(STORAGE_KEYS.HACKATHONS),
       attendance: getJSON(STORAGE_KEYS.ATTENDANCE),

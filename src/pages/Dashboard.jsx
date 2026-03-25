@@ -9,54 +9,8 @@ import HackathonAnalytics from '../components/Analytics/HackathonAnalytics';
 
 const Dashboard = () => {
   useEffect(() => {
-    // Seed localStorage for demo if empty
-    let changed = false;
-    
-    const storedProjects = localStorage.getItem('student_projects');
-    if (!storedProjects || !JSON.parse(storedProjects) || JSON.parse(storedProjects).length === 0) {
-      const demoProjects = [
-        {
-          id: 'proj1',
-          projectName: 'AI Student Analyzer',
-          type: 'Major',
-          submissionDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
-          reviews: [
-            { id: 'r1', title: 'Proposal', completed: true, date: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString() },
-            { id: 'r2', title: 'Mid Review', completed: false, date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString() }
-          ]
-        },
-        {
-          id: 'proj2',
-          projectName: 'Web3 Wallet Dashboard',
-          type: 'Minor',
-          submissionDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-          reviews: [
-             { id: 'r1', title: 'Final Review', completed: true, date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString() }
-          ]
-        }
-      ];
-      localStorage.setItem('student_projects', JSON.stringify(demoProjects));
-      changed = true;
-    }
-
-    const storedGrades = localStorage.getItem('current_subjects');
-    if (!storedGrades || !JSON.parse(storedGrades) || JSON.parse(storedGrades).length === 0) {
-      const demoGrades = [
-        { name: 'Data Structures', credits: 4, grade: 'A' },
-        { name: 'Operating Systems', credits: 3, grade: 'C' },
-        { name: 'Computer Networks', credits: 4, grade: 'S' },
-        { name: 'Database Systems', credits: 4, grade: 'O' },
-        { name: 'Software Engineering', credits: 3, grade: 'D' }
-      ];
-      localStorage.setItem('current_subjects', JSON.stringify(demoGrades));
-      localStorage.setItem('semesterStartDate', '2026-01-01');
-      localStorage.setItem('lastInstructionalDay', '2026-04-30');
-      changed = true;
-    }
-    
-    if (changed) {
-      window.dispatchEvent(new Event('storage'));
-    }
+    // Data filtering/processing can be done here if needed
+    // But DataService already handles the aggregation and seeding for demo accounts
   }, []);
   return (
     <div className="space-y-8 animate-in fade-in duration-500">

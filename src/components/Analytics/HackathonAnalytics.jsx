@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import { Code, TrendingUp, Award, Zap, BrainCircuit, Activity } from 'lucide-react';
 
-import { API_URL } from '../../utils/config';
+import { DataService } from '../../utils/DataService';
 
 const HackathonAnalytics = () => {
   const { token } = useAuth();
@@ -14,17 +14,20 @@ const HackathonAnalytics = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/student/dashboard`, {
-      headers: { 'x-auth-token': token }
-    })
-      .then(res => res.json())
-      .then(dashboardData => {
+    const fetchData = async () => {
+      try {
+        const dashboardData = await DataService.getDashboardData();
         setData({
           hackathons: dashboardData.hackathons || [],
           grades: dashboardData.grades || []
         });
+      } catch (err) {
+        console.error(err);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+    fetchData();
   }, [token]);
 
   if (loading) return <div className="animate-pulse h-96 bg-slate-50 rounded-[32px]"></div>;

@@ -11,7 +11,7 @@ import {
 
 const GRADE_POINTS = { 'S': 10, 'O': 10, 'A': 9, 'B': 8, 'C': 7, 'D': 6, 'E': 5, 'F': 0 };
 
-import { API_URL } from '../../utils/config';
+import { DataService } from '../../utils/DataService';
 
 /* ─────────────────────────────── helpers ─────────────────────────────── */
 function pearsonR(pts) {
@@ -101,34 +101,23 @@ const AttendanceCgpaAnalytics = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const semStart = localStorage.getItem('semesterStartDate') || '2026-01-01';
+        const semStart = localStorage.getItem('semesterStartDate') || '2026-01-15';
         const dayMap = { SUN: 0, MON: 1, TUE: 2, WED: 3, THU: 4, FRI: 5, SAT: 6 };
 
-        // Load CGPA subjects from localStorage (semester subjects with grades)
-        let gradeMap = {};
-        try {
-          const subs = JSON.parse(localStorage.getItem('current_subjects') || '[]');
-          subs.forEach(s => {
-            if (s.name && s.grade) {
-              gradeMap[s.name.trim().toLowerCase()] = GRADE_POINTS[s.grade] ?? null;
-            }
-          });
-        } catch (_) {}
+        const dashboardData = await DataService.getDashboardData();
+        const attendanceItems = dashboardData.attendance || [];
+        const grades = dashboardData.grades || [];
 
-        let attendanceItems = [];
-        if (token) {
-          const res = await fetch(`${API_URL}/api/student/dashboard`, {
-            headers: { 'x-auth-token': token }
-          });
-          if (res.ok) {
-            const json = await res.json();
-            attendanceItems = json.attendance || [];
+        // Build a map of subject names to grades for fast lookup
+        const gradeMap = {};
+        grades.forEach(g => {
+          if (g.name && g.grade) {
+            gradeMap[g.name.trim().toLowerCase()] = GRADE_POINTS[g.grade] || 0;
           }
-        }
+        });
 
         // Build scatter data (subject-wise)
-        const scatter = attendanceItems.map((item, idx) => {
+        const scatter = attendanceItems.map((item) => {
           const targetDays = (item.days || []).map(d => dayMap[d.toUpperCase()]);
           let attended = 0, total = 0;
           let cur = new Date(semStart);
@@ -162,14 +151,12 @@ const AttendanceCgpaAnalytics = () => {
 
         setScatterData(scatter);
 
-        // Build time-trend data (week-by-week average attendance across all subjects)
+        // Build time-trend data
         const weekMap = {};
         attendanceItems.forEach(item => {
-          const targetDays = (item.days || []).map(d => dayMap[d.toUpperCase()]);
           (item.history || []).forEach(h => {
             if (h.status === 'Ignored') return;
             const d = new Date(h.date);
-            // ISO week number
             const jan1 = new Date(d.getFullYear(), 0, 1);
             const weekNum = Math.ceil(((d - jan1) / 86400000 + jan1.getDay() + 1) / 7);
             const key = `${d.getFullYear()}-W${String(weekNum).padStart(2, '0')}`;
