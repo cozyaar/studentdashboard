@@ -17,6 +17,8 @@ import {
   Camera
 } from 'lucide-react';
 
+import { API_URL } from '../utils/config';
+
 const Settings = () => {
   const { token, logout, user } = useAuth();
   const [activeTab, setActiveTab] = useState('attendance');
@@ -53,7 +55,7 @@ const Settings = () => {
   const handleAdd = async (endpoint, body, resetForm) => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:5001/api/student/${endpoint}`, {
+      const res = await fetch(`${API_URL}/api/student/${endpoint}`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

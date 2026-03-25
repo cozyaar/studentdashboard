@@ -17,6 +17,8 @@ import {
   History
 } from 'lucide-react';
 
+import { API_URL } from '../utils/config';
+
 const Attendance = () => {
   const { token, user } = useAuth();
   const [attendance, setAttendance] = useState([]);
@@ -76,7 +78,7 @@ const Attendance = () => {
 
   const fetchAttendance = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/student/dashboard', {
+      const res = await fetch(`${API_URL}/api/student/dashboard`, {
         headers: { 'x-auth-token': token }
       });
       const data = await res.json();
@@ -117,7 +119,7 @@ const Attendance = () => {
     }
 
     try {
-      const res = await fetch('http://localhost:5001/api/student/attendance', {
+      const res = await fetch(`${API_URL}/api/student/attendance`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -165,7 +167,7 @@ const Attendance = () => {
 
   const updateAttendanceItem = async (updatedItem) => {
     try {
-      const res = await fetch(`http://localhost:5001/api/student/attendance/${updatedItem._id}`, {
+      const res = await fetch(`${API_URL}/api/student/attendance/${updatedItem._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -183,7 +185,7 @@ const Attendance = () => {
 
   const deleteCourse = async (id) => {
     try {
-      await fetch(`http://localhost:5001/api/student/attendance/${id}`, {
+      await fetch(`${API_URL}/api/student/attendance/${id}`, {
         method: 'DELETE',
         headers: { 'x-auth-token': token }
       });

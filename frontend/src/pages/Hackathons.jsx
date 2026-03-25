@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Trophy, Calendar, Users, Image as ImageIcon, FileText, X, Edit2, Trash2, Plus, Code, Award, Target } from 'lucide-react';
+import { API_URL } from '../utils/config';
 
 const Hackathons = () => {
   const { token, hackathons, setHackathons } = useAuth(); // Assume hackathons and setHackathons are provided by context, or we can fetch locally.
@@ -19,7 +20,7 @@ const Hackathons = () => {
 
   // Fetch hackathons on mount
   React.useEffect(() => {
-    fetch('http://localhost:5001/api/student/dashboard', { headers: { 'x-auth-token': token } })
+    fetch(`${API_URL}/api/student/dashboard`, { headers: { 'x-auth-token': token } })
       .then(res => res.json())
       .then(data => {
         setLocalHackathons(data.hackathons || []);
@@ -79,7 +80,7 @@ const Hackathons = () => {
       skills: formData.skills.split(',').map(s => s.trim()).filter(Boolean)
     };
 
-    const url = editingId ? `http://localhost:5001/api/student/hackathon/${editingId}` : 'http://localhost:5001/api/student/hackathon';
+    const url = editingId ? `${API_URL}/api/student/hackathon/${editingId}` : `${API_URL}/api/student/hackathon`;
     const method = editingId ? 'PUT' : 'POST';
 
     const res = await fetch(url, {
@@ -103,7 +104,7 @@ const Hackathons = () => {
 
   const handleDelete = async (id) => {
     if (confirm('Are you sure you want to delete this hackathon?')) {
-      await fetch(`http://localhost:5001/api/student/hackathon/${id}`, {
+      await fetch(`${API_URL}/api/student/hackathon/${id}`, {
         method: 'DELETE',
         headers: { 'x-auth-token': token }
       });

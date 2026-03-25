@@ -6,13 +6,15 @@ import {
 } from 'recharts';
 import { Code, TrendingUp, Award, Zap, BrainCircuit, Activity } from 'lucide-react';
 
+import { API_URL } from '../../utils/config';
+
 const HackathonAnalytics = () => {
   const { token } = useAuth();
   const [data, setData] = useState({ hackathons: [], grades: [] });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:5001/api/student/dashboard', {
+    fetch(`${API_URL}/api/student/dashboard`, {
       headers: { 'x-auth-token': token }
     })
       .then(res => res.json())

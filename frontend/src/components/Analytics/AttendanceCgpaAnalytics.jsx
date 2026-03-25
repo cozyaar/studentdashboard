@@ -11,6 +11,8 @@ import {
 
 const GRADE_POINTS = { 'S': 10, 'O': 10, 'A': 9, 'B': 8, 'C': 7, 'D': 6, 'E': 5, 'F': 0 };
 
+import { API_URL } from '../../utils/config';
+
 /* ─────────────────────────────── helpers ─────────────────────────────── */
 function pearsonR(pts) {
   if (pts.length < 2) return 0;
@@ -116,7 +118,7 @@ const AttendanceCgpaAnalytics = () => {
 
         let attendanceItems = [];
         if (token) {
-          const res = await fetch('http://localhost:5001/api/student/dashboard', {
+          const res = await fetch(`${API_URL}/api/student/dashboard`, {
             headers: { 'x-auth-token': token }
           });
           if (res.ok) {

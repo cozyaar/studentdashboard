@@ -30,6 +30,8 @@ const calculateLevel = (count) => {
   return 100;
 };
 
+import { API_URL } from '../utils/config';
+
 const Skills = () => {
   const { token } = useAuth();
   const [selectedCareer, setSelectedCareer] = useState("Full Stack Developer");
@@ -41,7 +43,7 @@ const Skills = () => {
     const fetchData = async () => {
       try {
         // Fetch Hackathons
-        const res = await fetch('http://localhost:5001/api/student/dashboard', {
+        const res = await fetch(`${API_URL}/api/student/dashboard`, {
           headers: { 'x-auth-token': token }
         });
         if (res.ok) {
