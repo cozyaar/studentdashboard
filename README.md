@@ -72,4 +72,4 @@ npm run dev # Starts the Dev server on http://localhost:5173
 ### **Student Syllabus Compliance**
 *This project strictly avoids TypeScript and other external compilers. It uses standard HTML5, CSS3, JavaScript (ES6+), React JS, and Node.js to align with standard web development academic requirements.*
 
-Built for Excellence by **Lithesh**
+Built for Excellence
