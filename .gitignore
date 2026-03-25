@@ -1,0 +1,23 @@
+# Node modules
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# Build outputs
+dist/
+build/
+frontend/dist/
+
+# Environment variables
+.env
+backend/.env
+
+# Local storage and state
+.DS_Store
+*.log
+
+# Editor specific
+.vscode/
+.idea/
+.gemini/
+.agents/
