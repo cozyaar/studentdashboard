@@ -1,16 +1,79 @@
-# React + Vite
+# 📊 VIT Student Performance & Academic Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A sleek, premium MERN-stack dashboard designed for VIT students to track attendance, calculate CGPAs, analyze skill gaps, and manage technical accomplishments in one unified interface.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 1-Click Vercel Hosting (No MongoDB Required)
 
-## React Compiler
+This project has been optimized for **instant zero-config deployment** on Vercel. 
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend**: Full-featured React app with Glassmorphism and Neon-Dark aesthetics.
+- **Backend (Node.js)**: Integrated serverless API handles dashboard logic.
+- **Data Persistence**: Uses a custom **`DataService`** (located at `src/utils/DataService.js`) that leverages the browser's `localStorage` for high-speed persistence, completely removing the complexity of MongoDB and JWT for student submissions.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🔥 Key Features
+
+### 📅 Advanced Attendance Tracker
+- **Real-time Percentage Calculation**: Automatically calculates attendance based on your semester start and instructional days.
+- **Skips & Freedoms**: Tells you exactly how many classes you can afford to skip without dropping below 75% or 80%.
+- **Interactive Logs**: Click any day in the grid to toggle status (Present, Absent, On Duty, Ignored).
+
+### 📈 CGPA / SGPA Dynamic Calculator
+- **Future GPA Prediction**: Set a target CGPA and find out exactly what SGPA you need for the current semester to reach it.
+- **Credits & Grade Sync**: Syncs with your dashboard metrics to provide real-time academic standing.
+
+### 🧠 Skill Gap & Career Insights
+- **Proficiency Radar**: Plotted against industry role benchmarks (Frontend, AI, Data Science).
+- **Automated Insights**: Identifies your strengths and highlights critical improvement areas based on your projects and hackathons.
+
+### 🏆 Hackathon & Project Management
+- **Achievement Vault**: Store hackathon roles, certificates, and team details.
+- **Project Milestones**: Track progress and timelines for major/minor projects.
+
+---
+
+## 🛠️ Tech Stack (Syllabus Compliant)
+
+- **Frontend**: React (Vite), Tailwind CSS, Lucide Icons, Recharts (for Analytics)
+- **Backend Architecture**: Node.js (Vercel Serverless API)
+- **Deployment**: Vercel (Production Ready)
+- **Languages**: HTML5, CSS3, JavaScript (ES6+)
+
+---
+
+## 🏗️ Getting Started Locally
+
+1. **Clone the Repo**:
+   ```bash
+   git clone https://github.com/cozyaar/studentdashboard.git
+   cd studentdashboard
+   ```
+
+2. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Run Development Server**:
+   ```bash
+   npm run dev
+   ```
+
+4. **Access the Portal**:
+   Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+---
+
+## 📦 Deployment Instructions
+
+Just import the root of this repository into your Vercel account. 
+- Vercel will automatically detect the **Vite** frontend and the **`/api`** folder.
+- No environment variables are required for basic usage.
+
+---
+
+Developed for VIT Academic Project.
+Made with ❤️ for Students.
