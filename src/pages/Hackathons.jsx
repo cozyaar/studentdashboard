@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Trophy, Calendar, Users, Image as ImageIcon, FileText, X, Edit2, Trash2, Plus, Code, Award, Target } from 'lucide-react';
-import { API_URL } from '../utils/config';
+import { Trophy, Calendar, Users, Image as ImageIcon, FileText, X, Edit2, Trash2, Plus, Code, Award, Target, Loader2 } from 'lucide-react';
+import { DataService } from '../utils/DataService';
 
 const Hackathons = () => {
   const { token, hackathons, setHackathons } = useAuth(); // Assume hackathons and setHackathons are provided by context, or we can fetch locally.
@@ -20,14 +20,19 @@ const Hackathons = () => {
 
   // Fetch hackathons on mount
   React.useEffect(() => {
-    fetch(`${API_URL}/api/student/dashboard`, { headers: { 'x-auth-token': token } })
-      .then(res => res.json())
-      .then(data => {
+    const fetchData = async () => {
+      try {
+        const data = await DataService.getDashboardData();
         setLocalHackathons(data.hackathons || []);
-        if (setHackathons) setHackathons(data.hackathons || []);
         setIsLoading(false);
-      });
-  }, [token, setHackathons]);
+      } catch (err) {
+        console.error("Failed to load hackathons", err);
+      }
+    };
+    fetchData();
+    window.addEventListener('storage', fetchData);
+    return () => window.removeEventListener('storage', fetchData);
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -75,7 +80,7 @@ const Hackathons = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setIsLoading(true);
     const payload = {
       ...formData,
       skills: formData.skills.split(',').map(s => s.trim()).filter(Boolean)
@@ -95,24 +100,22 @@ const Hackathons = () => {
       resetForm();
     } catch (error) {
       console.error("Error submitting hackathon:", error);
-      // Optionally, show an error message to the user
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
     if (confirm('Are you sure you want to delete this hackathon?')) {
-      setLoading(true);
+      setIsLoading(true);
       try {
         await DataService.deleteHackathon(id, token);
         setLocalHackathons(prev => prev.filter(h => h._id !== id));
         if (setHackathons) setHackathons(prev => prev.filter(h => h._id !== id)); // Update context as well
       } catch (error) {
         console.error("Error deleting hackathon:", error);
-        // Optionally, show an error message to the user
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     }
   };
